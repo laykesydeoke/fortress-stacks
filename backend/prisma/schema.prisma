@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Business {
+  id                String   @id @default(cuid())
+  name              String
+  email             String   @unique
+  walletAddress     String   @unique
+  liquidityThreshold Float   @default(0.2) // Keep 20% liquid by default
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  payments          Payment[]
+  treasuryOperations TreasuryOperation[]
+  yieldStrategies   YieldStrategy[]
+  
+  @@map("businesses")
+}
+
+model Payment {
+  id                String      @id @default(cuid())
+  businessId        String
+  amount            Float
+  currency          String      @default("sBTC")
+  status            PaymentStatus
+  transactionHash   String?
+  customerEmail     String?
+  description       String?
+  metadata          Json?
+  confirmedAt       DateTime?
+  createdAt         DateTime    @default(now())
+  
+  business          Business    @relation(fields: [businessId], references: [id])
+  
+  @@map("payments")
+}
+
+model TreasuryOperation {
+  id              String            @id @default(cuid())
+  businessId      String
+  operationType   TreasuryOpType
+  amount          Float
+  sourceAddress   String?
+  targetAddress   String?
+  transactionHash String?
+  status          OperationStatus
+  executedAt      DateTime?
+  createdAt       DateTime          @default(now())
+  
+  business        Business          @relation(fields: [businessId], references: [id])
+  
+  @@map("treasury_operations")
+}
+
+model YieldStrategy {
+  id          String   @id @default(cuid())
+  businessId  String
+  protocol    String   // e.g., "zest", "arkadiko", "alex"
+  allocation  Float    // Percentage of funds
+  currentAPY  Float
+  totalEarned Float    @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  business    Business @relation(fields: [businessId], references: [id])
+  
+  @@map("yield_strategies")
+}
+
+enum PaymentStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+  REFUNDED
+}
+
+enum TreasuryOpType {
+  DEPOSIT
+  WITHDRAW
+  REBALANCE
+  YIELD_HARVEST
+}
+
+enum OperationStatus {
+  PENDING
+  EXECUTING
+  COMPLETED
+  FAILED
+}

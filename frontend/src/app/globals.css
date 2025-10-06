@@ -1,0 +1,659 @@
+@import 'tailwindcss';
+
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+:root {
+  /* FortressStacks Color Palette */
+  --fs-fortress-navy: #0B1C2C;
+  --fs-citadel-slate: #1F2F3F;
+  --fs-sentinel-copper: #C67026;
+  --fs-beacon-amber: #F3A712;
+  --fs-signal-teal: #2BD9D9;
+  --fs-bastion-mist: #F3F7FA;
+  --fs-rampart-steel: #4A5D70;
+  
+  /* Legacy aliases for gradual migration */
+  --bitcoin-neon: var(--fs-beacon-amber);
+  --bitcoin-glow: rgba(243, 167, 18, 0.8);
+  --bitcoin-primary: var(--fs-sentinel-copper);
+  --bitcoin-dark: #A65D1F;
+  
+  --stacks-neon: var(--fs-signal-teal);
+  --stacks-glow: rgba(43, 217, 217, 0.8);
+  --stacks-primary: var(--fs-signal-teal);
+  --stacks-dark: #229999;
+  
+  --cyber-blue: var(--fs-signal-teal);
+  --cyber-green: #00ff88;
+  --cyber-purple: #b800ff;
+  --cyber-pink: #ff00aa;
+  
+  /* Dark Theme Base - Updated for FortressStacks */
+  --bg-primary: var(--fs-fortress-navy);
+  --bg-secondary: var(--fs-citadel-slate);
+  --bg-tertiary: #2A3A4A;
+  --bg-card: rgba(31, 47, 63, 0.8);
+  --bg-glass: rgba(243, 247, 250, 0.02);
+  
+  --text-primary: var(--fs-bastion-mist);
+  --text-secondary: var(--fs-rampart-steel);
+  --text-tertiary: #6B7D8A;
+  
+  --border-primary: rgba(243, 247, 250, 0.1);
+  --border-glow: rgba(198, 112, 38, 0.3);
+  --border-stacks: rgba(43, 217, 217, 0.3);
+  
+  /* FortressStacks Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--fs-sentinel-copper) 0%, var(--fs-signal-teal) 100%);
+  --gradient-neon: linear-gradient(135deg, var(--fs-beacon-amber) 0%, var(--fs-signal-teal) 50%, var(--fs-sentinel-copper) 100%);
+  --gradient-dark: linear-gradient(135deg, var(--fs-fortress-navy) 0%, var(--fs-citadel-slate) 50%, var(--bg-tertiary) 100%);
+  --gradient-card: linear-gradient(145deg, rgba(31, 47, 63, 0.9) 0%, rgba(42, 58, 74, 0.6) 100%);
+  --gradient-hero: linear-gradient(135deg, var(--fs-fortress-navy) 0%, var(--fs-citadel-slate) 100%);
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* FortressStacks Background Effects */
+.web3-bg {
+  background: radial-gradient(ellipse at top, rgba(198, 112, 38, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom right, rgba(43, 217, 217, 0.15) 0%, transparent 50%),
+              radial-gradient(ellipse at bottom left, rgba(243, 167, 18, 0.1) 0%, transparent 50%),
+              var(--fs-fortress-navy);
+  position: relative;
+  min-height: 100vh;
+}
+
+.web3-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(198, 112, 38, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(43, 217, 217, 0.03) 0%, transparent 50%);
+  animation: breathe 8s ease-in-out infinite;
+  z-index: -1;
+}
+
+/* Particle Effect Background */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -2;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--fs-beacon-amber);
+  border-radius: 50%;
+  animation: float-particle 20s linear infinite;
+  box-shadow: 0 0 6px rgba(243, 167, 18, 0.8);
+}
+
+.particle:nth-child(2n) {
+  background: var(--fs-signal-teal);
+  box-shadow: 0 0 6px rgba(43, 217, 217, 0.8);
+  animation-duration: 15s;
+}
+
+.particle:nth-child(3n) {
+  background: var(--fs-sentinel-copper);
+  box-shadow: 0 0 6px rgba(198, 112, 38, 0.8);
+  animation-duration: 25s;
+}
+
+/* Premium Glass Morphism */
+.web3-glass {
+  background: linear-gradient(145deg, 
+    rgba(255, 255, 255, 0.05) 0%, 
+    rgba(255, 255, 255, 0.01) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.web3-glass::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.1) 50%, 
+    transparent 100%);
+  transition: left 0.6s ease;
+}
+
+.web3-glass:hover::before {
+  left: 100%;
+}
+
+/* Neon Cards */
+.neon-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--border-primary);
+  border-radius: 20px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.neon-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--gradient-neon);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.neon-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-glow);
+  box-shadow: 
+    0 8px 40px rgba(198, 112, 38, 0.2),
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(243, 247, 250, 0.2);
+}
+
+.neon-card:hover::before {
+  opacity: 1;
+}
+
+/* Bitcoin Themed Card */
+.neon-card-bitcoin {
+  background: linear-gradient(145deg, 
+    rgba(198, 112, 38, 0.1) 0%, 
+    rgba(11, 28, 44, 0.9) 100%);
+  border: 1px solid rgba(198, 112, 38, 0.3);
+}
+
+.neon-card-bitcoin:hover {
+  border-color: var(--fs-sentinel-copper);
+  box-shadow: 
+    0 8px 40px rgba(198, 112, 38, 0.3),
+    0 0 20px rgba(243, 167, 18, 0.4),
+    inset 0 1px 0 rgba(243, 167, 18, 0.2);
+}
+
+/* Stacks Themed Card */
+.neon-card-stacks {
+  background: linear-gradient(145deg, 
+    rgba(43, 217, 217, 0.1) 0%, 
+    rgba(11, 28, 44, 0.9) 100%);
+  border: 1px solid rgba(43, 217, 217, 0.3);
+}
+
+.neon-card-stacks:hover {
+  border-color: var(--fs-signal-teal);
+  box-shadow: 
+    0 8px 40px rgba(43, 217, 217, 0.3),
+    0 0 20px rgba(43, 217, 217, 0.4),
+    inset 0 1px 0 rgba(43, 217, 217, 0.2);
+}
+
+/* Premium Buttons */
+.btn-web3 {
+  background: var(--gradient-primary);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 14px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 14px;
+}
+
+.btn-web3::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.2) 50%, 
+    transparent 100%);
+  transition: left 0.5s ease;
+}
+
+.btn-web3:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 30px rgba(255, 149, 0, 0.4),
+    0 0 20px rgba(157, 101, 255, 0.3);
+  border-color: var(--bitcoin-neon);
+}
+
+.btn-web3:hover::before {
+  left: 100%;
+}
+
+.btn-web3:active {
+  transform: translateY(-1px);
+}
+
+/* Bitcoin Button */
+.btn-bitcoin {
+  background: linear-gradient(135deg, var(--bitcoin-primary) 0%, var(--bitcoin-dark) 100%);
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+}
+
+.btn-bitcoin:hover {
+  box-shadow: 
+    0 8px 25px rgba(249, 115, 22, 0.5),
+    0 0 20px rgba(255, 149, 0, 0.6);
+}
+
+/* Stacks Button */
+.btn-stacks {
+  background: linear-gradient(135deg, var(--stacks-primary) 0%, var(--stacks-dark) 100%);
+  box-shadow: 0 4px 15px rgba(157, 101, 255, 0.3);
+}
+
+.btn-stacks:hover {
+  box-shadow: 
+    0 8px 25px rgba(157, 101, 255, 0.5),
+    0 0 20px rgba(138, 43, 226, 0.6);
+}
+
+/* Ghost Button */
+.btn-ghost {
+  background: transparent;
+  border: 2px solid var(--border-primary);
+  color: var(--text-primary);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--bitcoin-neon);
+  color: var(--bitcoin-neon);
+  box-shadow: 
+    0 0 20px rgba(255, 149, 0, 0.3),
+    inset 0 0 20px rgba(255, 149, 0, 0.1);
+}
+
+/* Neon Text Effects */
+.text-neon-bitcoin {
+  color: var(--fs-beacon-amber);
+  text-shadow: 
+    0 0 10px rgba(243, 167, 18, 0.8),
+    0 0 20px rgba(243, 167, 18, 0.8),
+    0 0 40px rgba(243, 167, 18, 0.8);
+}
+
+.text-neon-stacks {
+  color: var(--fs-signal-teal);
+  text-shadow: 
+    0 0 10px rgba(43, 217, 217, 0.8),
+    0 0 20px rgba(43, 217, 217, 0.8),
+    0 0 40px rgba(43, 217, 217, 0.8);
+}
+
+.text-gradient {
+  background: var(--gradient-neon);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: bold;
+}
+
+.text-hologram {
+  background: linear-gradient(45deg, 
+    var(--fs-signal-teal) 0%, 
+    var(--fs-beacon-amber) 25%, 
+    var(--fs-sentinel-copper) 50%, 
+    var(--fs-beacon-amber) 75%, 
+    var(--fs-signal-teal) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background-size: 400% 400%;
+  animation: hologram 3s ease infinite;
+}
+
+/* Navigation */
+.nav-web3 {
+  background: rgba(11, 28, 44, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-primary);
+}
+
+/* Ensure proper stacking for Tailwind v4 */
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+/* Tab Navigation Improvements */
+.tab-navigation {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(0, 0, 0, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-link {
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-neon);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-link:hover::before,
+.nav-link.active::before {
+  width: 80%;
+}
+
+/* Input Fields */
+.input-web3 {
+  background: rgba(31, 47, 63, 0.8);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  color: var(--text-primary);
+  padding: 14px 16px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.input-web3:focus {
+  outline: none;
+  border-color: var(--fs-sentinel-copper);
+  box-shadow: 
+    0 0 0 3px rgba(198, 112, 38, 0.1),
+    0 0 20px rgba(198, 112, 38, 0.2);
+  background: rgba(31, 47, 63, 0.95);
+}
+
+.input-web3::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Metrics Cards */
+.metric-card {
+  background: var(--gradient-card);
+  border: 1px solid var(--border-primary);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  height: 4px;
+  background: var(--gradient-neon);
+  border-radius: 16px 16px 0 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.metric-card:hover::before {
+  opacity: 1;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--fs-beacon-amber);
+  text-shadow: 0 0 10px rgba(243, 167, 18, 0.8);
+}
+
+.metric-label {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+/* Loading States */
+.loading-shimmer {
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.1) 25%, 
+    rgba(255, 255, 255, 0.2) 50%, 
+    rgba(255, 255, 255, 0.1) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Status Indicators */
+.status-online {
+  color: var(--cyber-green);
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
+}
+
+.status-pending {
+  color: var(--bitcoin-neon);
+  text-shadow: 0 0 10px var(--bitcoin-glow);
+  animation: pulse-glow 2s infinite;
+}
+
+.status-error {
+  color: var(--cyber-pink);
+  text-shadow: 0 0 10px rgba(255, 0, 170, 0.8);
+}
+
+/* Animations */
+@keyframes breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes hologram {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    text-shadow: 
+      0 0 5px var(--bitcoin-glow),
+      0 0 10px var(--bitcoin-glow),
+      0 0 20px var(--bitcoin-glow);
+  }
+  50% {
+    text-shadow: 
+      0 0 10px var(--bitcoin-glow),
+      0 0 20px var(--bitcoin-glow),
+      0 0 40px var(--bitcoin-glow);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(255, 149, 0, 0.3),
+      inset 0 0 20px rgba(255, 149, 0, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 40px rgba(255, 149, 0, 0.5),
+      inset 0 0 30px rgba(255, 149, 0, 0.2);
+  }
+}
+
+/* Tab Scrolling */
+.tab-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tab-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .neon-card {
+    padding: 16px;
+    margin: 8px 0;
+  }
+  
+  .btn-web3 {
+    padding: 12px 20px;
+    font-size: 12px;
+  }
+  
+  .metric-value {
+    font-size: 1.5rem;
+  }
+  
+  /* Mobile Tab Styling */
+  .nav-link {
+    font-size: 14px;
+    padding: 12px 16px;
+  }
+  
+  /* Ensure tabs are visible on mobile */
+  .tab-container {
+    padding-bottom: 4px;
+  }
+  
+  /* Mobile header adjustments */
+  .text-hologram {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .neon-card {
+    padding: 12px;
+    border-radius: 12px;
+  }
+  
+  .nav-link {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+  
+  .text-hologram {
+    font-size: 1.25rem;
+  }
+}
+
+/* Selection and Focus States */
+::selection {
+  background: rgba(255, 149, 0, 0.3);
+  text-shadow: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--bitcoin-neon);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 149, 0, 0.2);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gradient-neon);
+}

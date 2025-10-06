@@ -37,11 +37,11 @@ import {
 } from 'lucide-react';
 
 export default function DashboardPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<unknown>(null);
   const [businessId, setBusinessId] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
-  const [treasuryData, setTreasuryData] = useState<any>(null);
+  const [treasuryData, setTreasuryData] = useState<unknown>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -57,7 +57,7 @@ export default function DashboardPage() {
 
   const initializeBusiness = async (userData: any) => {
     try {
-      const walletAddress = userData.profile.stxAddress?.testnet || userData.profile.stxAddress?.mainnet;
+      const walletAddress = userData?.profile?.stxAddress?.testnet || userData?.profile?.stxAddress?.mainnet;
       
       // For this demo, we'll skip the API calls and use the wallet address as business ID
       console.log('Using wallet address as business ID (API backend not required)');
@@ -66,7 +66,7 @@ export default function DashboardPage() {
     } catch (error) {
       console.error('Failed to initialize business, using fallback:', error);
       // Fallback to using wallet address as business ID
-      const walletAddress = userData.profile.stxAddress?.testnet || userData.profile.stxAddress?.mainnet;
+      const walletAddress = userData?.profile?.stxAddress?.testnet || userData?.profile?.stxAddress?.mainnet;
       setBusinessId(walletAddress || 'demo-business');
     } finally {
       setLoading(false);
@@ -283,7 +283,7 @@ export default function DashboardPage() {
                   <div className="web3-glass rounded-xl p-4 bg-stacks-500/10">
                     <h4 className="font-medium text-white mb-2">Demo Scenario:</h4>
                     <p className="text-white/70 text-sm mb-3">
-                      You're testing a payment to a demo coffee shop for a premium coffee blend
+                      You&apos;re testing a payment to a demo coffee shop for a premium coffee blend
                     </p>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-white/80">Premium Coffee Blend (1kg)</span>
@@ -297,9 +297,9 @@ export default function DashboardPage() {
                       <ol className="mt-1 ml-4 list-decimal space-y-1">
                         <li>Make sure you have sBTC tokens (check balance above)</li>
                         <li>Enter amount (e.g., 0.001)</li>
-                        <li>Click "Pay" → Xverse wallet should pop up</li>
+                        <li>Click &quot;Pay&quot; → Xverse wallet should pop up</li>
                         <li>Approve transaction</li>
-                        <li>Success! You've sent sBTC</li>
+                        <li>Success! You&apos;ve sent sBTC</li>
                       </ol>
                     </div>
                     

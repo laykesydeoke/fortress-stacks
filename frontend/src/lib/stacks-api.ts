@@ -9,7 +9,7 @@ export interface StacksTransaction {
   sender_address: string;
   sponsored: boolean;
   post_condition_mode: string;
-  post_conditions: any[];
+  post_conditions: unknown[];
   anchor_mode: string;
   block_hash: string;
   block_height: number;
@@ -31,7 +31,7 @@ export interface StacksTransaction {
     contract_id: string;
     function_name: string;
     function_signature: string;
-    function_args: any[];
+    function_args: unknown[];
   };
   token_transfer?: {
     recipient_address: string;
@@ -222,7 +222,7 @@ export class StacksAPIService {
   }
 
   // Get recent transactions for specific contract calls
-  async getPaymentTransactions(businessAddress: string, contractId: string): Promise<any[]> {
+  async getPaymentTransactions(businessAddress: string, contractId: string): Promise<unknown[]> {
     try {
       const transactions = await this.getAddressTransactions(businessAddress);
       

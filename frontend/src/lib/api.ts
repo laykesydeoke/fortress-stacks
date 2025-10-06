@@ -12,7 +12,7 @@ export const CONTRACT_INFO = {
 };
 
 class APICache {
-  private cache = new Map<string, { data: any; expiry: number }>();
+  private cache = new Map<string, { data: unknown; expiry: number }>();
   
   get(key: string) {
     const item = this.cache.get(key);
@@ -23,7 +23,7 @@ class APICache {
     return item.data;
   }
   
-  set(key: string, data: any, ttl = 30000) { // 30 second default TTL
+  set(key: string, data: unknown, ttl = 30000) { // 30 second default TTL
     this.cache.set(key, {
       data,
       expiry: Date.now() + ttl
@@ -65,9 +65,28 @@ export async function fetchWithCache(url: string, options?: RequestInit) {
   return data;
 }
 
+interface BusinessData {
+  name: string;
+  walletAddress: string;
+  category?: string;
+}
+
+interface YieldStrategyData {
+  strategyType: string;
+  allocatedAmount: number;
+  riskLevel: string;
+}
+
+interface PaymentData {
+  businessAddress: string;
+  amount: number;
+  customerAddress?: string;
+  metadata?: Record<string, unknown>;
+}
+
 export const api = {
   // Business endpoints
-  createBusiness: (data: any) => 
+  createBusiness: (data: BusinessData) => 
     fetchWithCache('/api/businesses', { method: 'POST', body: JSON.stringify(data) }),
   
   getBusinessByWallet: (address: string) => 
@@ -79,11 +98,11 @@ export const api = {
   rebalanceTreasury: (businessId: string) => 
     fetchWithCache(`/api/businesses/${businessId}/rebalance`, { method: 'POST' }),
 
-  createYieldStrategy: (businessId: string, data: any) =>
+  createYieldStrategy: (businessId: string, data: YieldStrategyData) =>
     fetchWithCache(`/api/businesses/${businessId}/yield-strategies`, { method: 'POST', body: JSON.stringify(data) }),
 
   // Payment endpoints
-  createPayment: (data: any) => 
+  createPayment: (data: PaymentData) => 
     fetchWithCache('/api/payments/create', { method: 'POST', body: JSON.stringify(data) }),
   
   getPayments: (businessId: string, page = 1, limit = 10) => 

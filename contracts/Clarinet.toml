@@ -1,28 +1,29 @@
 [project]
-name = 'contracts'
-description = ''
+name = 'fortress-stacks'
+description = 'FortressStacks - Institutional Bitcoin Treasury Command Center'
 authors = []
 telemetry = true
 cache_dir = './.cache'
 requirements = []
-[contracts.payment-processor]
-path = 'contracts/payment-processor.clar'
-clarity_version = 3
-epoch = '3.1'
-
-[contracts.treasury-manager]
-path = 'contracts/treasury-manager.clar'
-clarity_version = 3
-epoch = '3.1'
-
-[contracts.yield-strategy]
-path = 'contracts/yield-strategy.clar'
-clarity_version = 3
-epoch = 'latest'
 
 [contracts.sbtc-token]
 path = 'contracts/sbtc-token.clar'
-clarity_version = 3
+clarity_version = 4
+epoch = 'latest'
+
+[contracts.payment-processor]
+path = 'contracts/payment-processor.clar'
+clarity_version = 4
+epoch = 'latest'
+
+[contracts.treasury-manager]
+path = 'contracts/treasury-manager.clar'
+clarity_version = 4
+epoch = 'latest'
+
+[contracts.yield-strategy]
+path = 'contracts/yield-strategy.clar'
+clarity_version = 4
 epoch = 'latest'
 [repl.analysis]
 passes = ['check_checker']

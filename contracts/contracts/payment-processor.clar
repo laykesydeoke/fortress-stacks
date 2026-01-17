@@ -1,16 +1,17 @@
 ;; title: payment-processor
-;; version: 1.0.0
+;; version: 2.0.0
 ;; summary: sBTC payment processing contract for businesses
 ;; description: Handles payment creation, confirmation, and business treasury integration
 
 ;; constants
+(define-constant CONTRACT_OWNER tx-sender)
 (define-constant ERR-NOT-AUTHORIZED (err u401))
 (define-constant ERR-INSUFFICIENT-BALANCE (err u402))
 (define-constant ERR-PAYMENT-NOT-FOUND (err u404))
 (define-constant ERR-ALREADY-CONFIRMED (err u409))
+(define-constant ERR-TRANSFER-FAILED (err u410))
 
 ;; data vars
-(define-data-var contract-owner principal tx-sender)
 (define-data-var payment-nonce uint u0)
 
 ;; data maps
@@ -29,6 +30,7 @@
 ;; public functions
 (define-public (create-payment (business principal) (amount uint) (customer (optional principal)))
   (let ((payment-id (var-get payment-nonce)))
+    (asserts! (> amount u0) ERR-INSUFFICIENT-BALANCE)
     (map-set payments payment-id {
       business: business,
       amount: amount,
@@ -38,6 +40,7 @@
       confirmed-at: none
     })
     (var-set payment-nonce (+ payment-id u1))
+    (print {event: "payment-created", id: payment-id, business: business, amount: amount})
     (ok payment-id)
   )
 )
@@ -46,21 +49,23 @@
   (let ((payment (unwrap! (map-get? payments payment-id) ERR-PAYMENT-NOT-FOUND)))
     (asserts! (is-eq (get customer payment) (some tx-sender)) ERR-NOT-AUTHORIZED)
     (asserts! (is-eq (get status payment) "pending") ERR-ALREADY-CONFIRMED)
-    
-    ;; Transfer sBTC to business (simplified for MVP - would integrate with actual sBTC token)
-    ;; (try! (contract-call? .sbtc-token transfer 
-    ;;        (get amount payment) 
-    ;;        tx-sender 
-    ;;        (get business payment) 
-    ;;        none))
-    
-    ;; Update payment status
-    (map-set payments payment-id (merge payment {
-      status: "confirmed",
-      confirmed-at: (some stacks-block-height)
-    }))
-    
-    (ok true)
+
+    ;; Transfer sBTC from customer to business
+    (match (contract-call? .sbtc-token transfer
+             (get amount payment)
+             tx-sender
+             (get business payment)
+             none)
+      success (begin
+        (map-set payments payment-id (merge payment {
+          status: "confirmed",
+          confirmed-at: (some stacks-block-height)
+        }))
+        (print {event: "payment-confirmed", id: payment-id, amount: (get amount payment)})
+        (ok true)
+      )
+      error ERR-TRANSFER-FAILED
+    )
   )
 )
 

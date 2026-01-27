@@ -91,7 +91,7 @@ export class SBTCProtocolService {
           network,
           appDetails: {
             name: 'FortressStacks Treasury',
-            icon: window.location.origin + '/encheq-logo.png',
+            icon: window.location.origin + '/fortress-logo.png',
           },
           onFinish: (data) => {
             console.log('✅ STX transfer test successful:', data);
@@ -155,7 +155,7 @@ export class SBTCProtocolService {
         postConditions: [],
         postConditionMode: PostConditionMode.Allow,
         appDetails: {
-          name: 'Encheq Treasury',
+          name: 'FortressStacks Treasury',
           icon: window.location.origin + '/favicon.ico',
         },
         onFinish: (data) => {

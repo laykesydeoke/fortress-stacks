@@ -56,6 +56,7 @@ export const CONTRACT_FUNCTIONS = {
     DEPOSIT_TO_TREASURY: 'deposit-to-treasury',
     WITHDRAW_LIQUIDITY: 'withdraw-liquidity',
     EMERGENCY_WITHDRAW_ALL: 'emergency-withdraw-all',
+    PROCESS_WITHDRAWAL: 'process-withdrawal',
     GET_TREASURY_INFO: 'get-treasury-info',
     CALCULATE_OPTIMAL_ALLOCATION: 'calculate-optimal-allocation'
   },

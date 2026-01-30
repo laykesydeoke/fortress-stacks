@@ -142,6 +142,36 @@ export class BlockchainService {
     };
   }
 
+  async processWithdrawal(businessAddress: string, amount: number) {
+    if (!userSession.isUserSignedIn()) {
+      throw new Error('Wallet not connected');
+    }
+
+    const { contractAddress, contractName } = parseContractId(DEPLOYED_CONTRACTS.TREASURY_MANAGER);
+    const { openContractCall } = await import('@stacks/connect');
+
+    return new Promise((resolve, reject) => {
+      openContractCall({
+        contractAddress,
+        contractName,
+        functionName: CONTRACT_FUNCTIONS.TREASURY_MANAGER.PROCESS_WITHDRAWAL,
+        functionArgs: [
+          standardPrincipalCV(businessAddress),
+          uintCV(amount)
+        ],
+        network,
+        anchorMode: AnchorMode.Any,
+        postConditionMode: PostConditionMode.Allow,
+        onFinish: (data) => {
+          resolve({ txId: data.txId, transaction: data });
+        },
+        onCancel: () => {
+          reject(new Error('Transaction cancelled by user'));
+        }
+      });
+    });
+  }
+
   // Read-only functions
   async getTreasuryInfo(businessAddress: string) {
     try {

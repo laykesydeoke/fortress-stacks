@@ -12,9 +12,6 @@ import { RealDataDemo } from '@/components/dashboard/real-data-demo';
 import { ContractStatus } from '@/components/contract-status';
 import { DepositFlow } from '@/components/sbtc/deposit-flow';
 import { CheckoutWidget } from '@/components/payment/checkout-widget';
-import { ConnectionTest } from '@/components/debug/connection-test';
-import { STXTransferTest } from '@/components/debug/stx-transfer-test';
-import { WalletDiagnostic } from '@/components/debug/wallet-diagnostic';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -322,14 +319,12 @@ export default function DashboardPage() {
           </TabsContent>
 
           <TabsContent value="strategies" className="space-y-8">
-            <div className="grid xl:grid-cols-3 gap-8">
-              <div className="xl:col-span-2">
                 {businessId ? (
                   <div className="neon-card">
-                    <YieldStrategyManager 
+                    <YieldStrategyManager
                       businessId={businessId}
                       businessAddress={user?.profile?.stxAddress?.testnet || user?.profile?.stxAddress?.mainnet}
-                      availableBalance={0.2} // This would come from treasury data
+                      availableBalance={0.2}
                     />
                   </div>
                 ) : (
@@ -338,16 +333,6 @@ export default function DashboardPage() {
                     <p className="text-white/70">Loading yield strategies...</p>
                   </div>
                 )}
-              </div>
-              <div className="xl:col-span-1 space-y-4">
-                <div className="neon-card">
-                  <WalletDiagnostic />
-                </div>
-                <div className="neon-card">
-                  <STXTransferTest />
-                </div>
-              </div>
-            </div>
           </TabsContent>
 
           <TabsContent value="transactions" className="space-y-8">

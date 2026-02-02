@@ -4,7 +4,6 @@ export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
 import { CheckoutWidget } from '@/components/payment/checkout-widget';
-import { SimpleTest } from '@/components/debug/simple-test';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
@@ -151,11 +150,6 @@ export default function CheckoutDemoPage() {
                   </CardContent>
                 </Card>
               )}
-            </div>
-
-            {/* Debug Section */}
-            <div className="flex justify-center mb-8">
-              <SimpleTest />
             </div>
 
             {/* Payment Widget */}

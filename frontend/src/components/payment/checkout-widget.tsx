@@ -35,8 +35,6 @@ export function CheckoutWidget({
   const [isClient, setIsClient] = useState(false);
   const [sbtcBalance, setSbtcBalance] = useState<number>(0);
   const [loadingBalance, setLoadingBalance] = useState(false);
-  const [testMode, setTestMode] = useState(false);
-
   const sbtcProtocol = getSBTCProtocol();
   const user = isUserSignedIn() ? getUserData() : null;
   const userAddress = user?.profile?.stxAddress?.testnet || user?.profile?.stxAddress?.mainnet;
@@ -71,27 +69,15 @@ export function CheckoutWidget({
 
   const isValidStacksAddress = (address: string): boolean => {
     if (!address) return false;
-    // Testnet addresses can be 40 or 41 chars (ST + 38-39 chars), mainnet: S + 40 chars = 41 total
     const trimmed = address.trim();
-    const isValid = /^ST[A-Z0-9]{38,39}$|^S[A-Z0-9]{40}$/.test(trimmed);
-    console.log('Address validation:', { 
-      original: address, 
-      trimmed, 
-      length: trimmed.length, 
-      isValid, 
-      isTestnet: trimmed.startsWith('ST'),
-      regexTestST: /^ST[A-Z0-9]{38,39}$/.test(trimmed),
-      regexTestS: /^S[A-Z0-9]{40}$/.test(trimmed)
-    });
-    return isValid;
+    return /^ST[A-Z0-9]{38,39}$|^S[A-Z0-9]{40}$/.test(trimmed);
   };
 
-  // Debug the button disable conditions
   const getButtonDisableReason = () => {
     if (loading) return 'Loading...';
     if (!amount) return 'No amount entered';
     if (parseFloat(amount) <= 0) return 'Amount must be > 0';
-    if (!testMode && parseFloat(amount) > sbtcBalance) return 'Insufficient sBTC balance';
+    if (parseFloat(amount) > sbtcBalance) return 'Insufficient sBTC balance';
     if (!recipient) return 'No recipient address';
     if (!isValidStacksAddress(recipient)) return 'Invalid Stacks address format';
     if (!walletConnected || !userAddress) return 'Wallet not connected';
@@ -125,31 +111,15 @@ export function CheckoutWidget({
 
     const amountNum = parseFloat(amount);
     
-    // Balance check depends on test mode
-    if (testMode) {
-      // For STX test mode, we'll skip balance check since we're just testing wallet popup
-      console.log('🧪 Test mode: skipping balance check');
-    } else {
-      if (amountNum > sbtcBalance) {
-        onError?.(`Insufficient sBTC balance. You have ${sbtcBalance.toFixed(8)} sBTC`);
-        return;
-      }
+    if (amountNum > sbtcBalance) {
+      onError?.(`Insufficient sBTC balance. You have ${sbtcBalance.toFixed(8)} sBTC`);
+      return;
     }
 
     setLoading(true);
 
     try {
-      let transactionId: string;
-      
-      if (testMode) {
-        // Test with STX transfer first to verify wallet popup
-        console.log('🧪 Using STX test mode');
-        transactionId = await sbtcProtocol.testSTXTransfer(amountNum, recipient);
-      } else {
-        // REAL sBTC transfer using official contract
-        console.log('💰 Using real sBTC transfer');
-        transactionId = await sbtcProtocol.transferSBTC(amountNum, recipient);
-      }
+      const transactionId = await sbtcProtocol.transferSBTC(amountNum, recipient);
       
       console.log('✅ Payment successful:', transactionId);
       setTxId(transactionId);
@@ -277,22 +247,8 @@ export function CheckoutWidget({
                 </p>
               </div>
 
-              {/* Test Mode Toggle */}
-              <div className="flex items-center space-x-2 p-3 bg-transparent border border-blue-500/30 rounded-lg">
-                <input
-                  type="checkbox"
-                  id="testMode"
-                  checked={testMode}
-                  onChange={(e) => setTestMode(e.target.checked)}
-                  className="cursor-pointer"
-                />
-                <Label htmlFor="testMode" className="cursor-pointer text-sm text-white">
-                  Test Mode (use STX instead of sBTC to verify wallet popup works)
-                </Label>
-              </div>
-
               <div>
-                <Label htmlFor="amount">Amount ({testMode ? 'STX' : 'sBTC'})</Label>
+                <Label htmlFor="amount">Amount (sBTC)</Label>
                 <Input
                   id="amount"
                   type="number"
@@ -333,13 +289,6 @@ export function CheckoutWidget({
                 />
               </div>
 
-              {/* Debug Info */}
-              {getButtonDisableReason() && (
-                <div className="p-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-800">
-                  <strong>Button disabled:</strong> {getButtonDisableReason()}
-                </div>
-              )}
-
               <Button 
                 onClick={handlePayment} 
                 disabled={!!getButtonDisableReason()}
@@ -350,10 +299,8 @@ export function CheckoutWidget({
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                     Processing Payment...
                   </span>
-                ) : testMode ? (
-                  `🧪 Test Transfer ${amount || '0'} STX`
                 ) : (
-                  `💳 Pay ${amount || '0'} sBTC`
+                  `Pay ${amount || '0'} sBTC`
                 )}
               </Button>
             </div>

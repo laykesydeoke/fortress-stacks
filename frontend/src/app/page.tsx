@@ -492,7 +492,7 @@ export default function FortressStacksLandingPage() {
             </div>
             
             <div className="text-gray-400 text-sm text-center md:text-right">
-              <p>© 2024 FortressStacks. Built on Bitcoin & Stacks.</p>
+              <p>© 2025 FortressStacks. Built on Bitcoin & Stacks.</p>
               <p className="mt-1">Command the Bitcoin balance sheet</p>
             </div>
           </div>

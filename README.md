@@ -75,12 +75,13 @@ npm run dev
 - **Tailwind CSS** for styling
 - **Stacks Connect** for wallet integration
 
-### Blockchain Integration
-- **Real sBTC Contract**: `SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token`
-- **Treasury Contracts**: Deployed on testnet with address `ST381F1FY7JNH8MWAD1MMRQ8BPKV3BQ06N6H0JRAE`
+### Smart Contracts (Clarity 4)
+- **payment-processor**: SIP-010 payment creation and confirmation with sBTC transfers
+- **treasury-manager**: Deposit, withdrawal, and threshold-based rebalancing
+- **yield-strategy**: Multi-protocol yield allocation and harvesting
+- **sbtc-token**: SIP-010 fungible token (testnet mock)
 - **Hiro Stacks API**: For balance and transaction data
 - **SIP-010 Transfers**: Standard fungible token operations
-- **Post-conditions**: Transaction safety and exact amounts
 
 ### Network Support
 - **Testnet**: Full functionality with test assets
